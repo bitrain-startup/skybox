@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset=UTF-8/>
+        <link rel="stylesheet" type="text/css" href="/css/style.css"/>
+
+    </head>
+    <body>
+        <script src="/js/three.min.js"></script>
+        <script src="/js/OrbitControls.js"></script>
+
+    
+        <script>
+            
+            let scene, camera, renderer;
+            function init(){
+                scene = new THREE.Scene;
+                
+                //defining camera movement
+                camera = new THREE.PerspectiveCamera(55, window.innerWidth/window.innerHeight, 45, 30000);
+                camera.position.set(-900,-200,-900);
+
+                renderer = new THREE.WebGLRenderer({antialias:true});
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                document.body.appendChild(renderer.domElement);
+
+                let controls = new THREE.OrbitControls(camera, renderer.domElement);
+                controls.addEventListener("change",renderer);
+
+                //setando limites para zoom-in e zoom-out
+                controls.minDistance =500;
+                controls.maxDistance = 1500;
+
+
+                let materialArray = [];
+                let texture_1 = new THREE.TextureLoader().load('1.png');
+                let texture_2 = new THREE.TextureLoader().load('2.png');
+                let texture_3 = new THREE.TextureLoader().load('3.png');
+                let texture_4 = new THREE.TextureLoader().load('4.png');
+                let texture_5 = new THREE.TextureLoader().load('5.png');
+                let texture_6 = new THREE.TextureLoader().load('6.png');
+            
+                materialArray.push(new THREE.MeshBasicMaterial({map : texture_1}));
+                materialArray.push(new THREE.MeshBasicMaterial({map : texture_2}));
+                materialArray.push(new THREE.MeshBasicMaterial({map : texture_3}));
+                materialArray.push(new THREE.MeshBasicMaterial({map : texture_4}));
+                materialArray.push(new THREE.MeshBasicMaterial({map : texture_5}));
+                materialArray.push(new THREE.MeshBasicMaterial({map : texture_6}));
+                
+                for(let i=0;i<6;i++)
+                    materialArray[i].side = THREE.BackSide;
+
+                let skyboxGeo = new THREE.BoxGeometry(10000,10000,10000);
+                let skybox = new THREE.Mesh(skyboxGeo , materialArray);
+                scene.add(skybox);
+
+                animate();
+            
+            }
+
+                function animate(){
+                    renderer.render(scene, camera);
+                    requestAnimationFrame(animate);
+
+                }
+                init();
+
+        </script>
+    </body>
+</html>
